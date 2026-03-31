@@ -1,8 +1,14 @@
 {
     "extends": "@tsconfig/node24/tsconfig.json",
     "compilerOptions": {
+        "module": "Preserve",
+        "moduleResolution": "Bundler",
         "rootDir": "./src",
         "outDir": "./dist",
+        "noImplicitAny": true,
+        "noImplicitOverride": true,
+        "noUncheckedIndexedAccess": true,
+        "noPropertyAccessFromIndexSignature": true,
         "paths": {
             "@/*": ["./src/*"],
         },

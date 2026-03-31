@@ -8,6 +8,7 @@ import {
     validatorCompiler,
     type ZodTypeProvider,
 } from "fastify-type-provider-zod";
+import { placeOrderRouter } from "./modules/orders/routes/place-order.route";
 
 const app = fastify({
     logger: {
@@ -44,16 +45,10 @@ app.register(ScalarApiReference, {
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
-const port = parseInt(process.env.PORT ?? "3001", 10);
-const host: string = process.env.HOST ?? "127.0.0.1";
+const port = parseInt(process.env["PORT"] ?? "3001", 10);
+const host: string = process.env["HOST"] ?? "127.0.0.1";
 
-app.get("/checkout", async () => {
-    return "checkout successful";
-});
-
-app.get("/ping", async () => {
-    return "pong\n";
-});
+app.register(placeOrderRouter);
 
 app.listen({ port, host }, (err) => {
     if (err) {
