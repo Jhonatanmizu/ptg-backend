@@ -1,6 +1,7 @@
 import { SendMessageCommand, SQSClient } from "@aws-sdk/client-sqs";
+import type { IQueue } from "@/modules/orders/types";
 
-export class SQSGateway {
+export class SQSGateway  implements IQueue{
     private client: SQSClient;
     private queueUrl: string;
 

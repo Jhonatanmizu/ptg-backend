@@ -8,7 +8,7 @@ import {
     validatorCompiler,
     type ZodTypeProvider,
 } from "fastify-type-provider-zod";
-import { placeOrderRouter } from "./modules/orders/routes/place-order.route";
+import { ordersRouter } from "@/modules/orders/routes/orders.route";
 
 const app = fastify({
     logger: {
@@ -48,7 +48,7 @@ app.setSerializerCompiler(serializerCompiler);
 const port = parseInt(process.env["PORT"] ?? "3001", 10);
 const host: string = process.env["HOST"] ?? "127.0.0.1";
 
-app.register(placeOrderRouter);
+app.register(ordersRouter);
 
 app.listen({ port, host }, (err) => {
     if (err) {

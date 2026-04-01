@@ -1,8 +1,9 @@
 import type { Order } from "@/modules/orders/entities/Order";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
+import type { IOrdersRepository } from "@/modules/orders/types/order";
 
-export class DynamoOrdersRepository {
+export class OrdersRepository implements IOrdersRepository {
     private readonly ddbClient: DynamoDBDocumentClient;
     constructor() {
         this.ddbClient = DynamoDBDocumentClient.from(

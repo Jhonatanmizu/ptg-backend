@@ -1,6 +1,7 @@
 import { SendEmailCommand, SESClient } from "@aws-sdk/client-ses";
+import type { IEmailService } from "@/modules/orders/types";
 
-export class SESGateway {
+export class SESGateway implements IEmailService {
     private client: SESClient;
     private source: string;
 
