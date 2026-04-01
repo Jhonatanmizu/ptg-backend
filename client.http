@@ -1,0 +1,12 @@
+
+@ordersapi = http://127.0.0.1:3001/api/orders/v1
+
+POST {{ordersapi}}/place-order HTTP/1.1
+Content-Type: application/json
+
+{
+    "customerEmail": "sample@example.com",
+    "amount": 100
+}
+
+
