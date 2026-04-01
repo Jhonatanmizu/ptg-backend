@@ -1,7 +1,7 @@
 import { SendMessageCommand, SQSClient } from "@aws-sdk/client-sqs";
-import type { IQueue } from "@/modules/orders/types";
+import type { IQueueGateway } from "@/modules/orders/interfaces";
 
-export class SQSGateway  implements IQueue{
+export class SQSGateway  implements IQueueGateway{
     private client: SQSClient;
     private queueUrl: string;
 
@@ -12,12 +12,24 @@ export class SQSGateway  implements IQueue{
         this.queueUrl = "";
     }
 
-    async sendMessage(message: Record<string, unknown>): Promise<void> {
+    async publishMessage(message: Record<string, unknown>): Promise<void> {
         await this.client.send(
             new SendMessageCommand({
                 QueueUrl: this.queueUrl,
                 MessageBody: JSON.stringify(message),
             }),
         );
+    }
+
+    async consumeMessages(queueName: string, onMessage: (message: Record<string, unknown>) => Promise<void>): Promise<void> {       
+        // Implement message consumption logic here 
+    }
+
+    async ackMessage(message: Record<string, unknown>): Promise<void> {
+        // Implement message acknowledgment logic here
+    }
+
+    async nackMessage(message: Record<string, unknown>, requeue?: boolean): Promise<void> {
+        // Implement message negative acknowledgment logic here
     }
 }

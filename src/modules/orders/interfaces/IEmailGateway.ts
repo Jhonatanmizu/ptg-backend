@@ -1,3 +1,3 @@
-export interface IEmailService {
+export interface IEmailGateway{
     sendEmail(to: string, subject: string, body: string): Promise<void>;
 }
