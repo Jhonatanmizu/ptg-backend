@@ -1,9 +1,8 @@
 import { Order } from "@/modules/orders/entities/Order";
 import type { PlaceOrderDto } from "@/modules/orders/dto/place-order.dto";
-
-import type { IContainer } from '@/modules/orders/di/Registry';
 import { IEmailGateway, IQueueGateway } from "@/modules/orders/interfaces";
 import { IOrdersRepository } from "@/modules/orders/types";
+
 
 
 const placeOrderDto: PlaceOrderDto = {
@@ -14,22 +13,15 @@ const placeOrderDto: PlaceOrderDto = {
 
 export class PlaceOrder {
     constructor(
-        private readonly ordersContainer:IContainer
+        private readonly orderRepository: IOrdersRepository,
+        private readonly queueGateway: IQueueGateway,
+        private readonly emailGateway: IEmailGateway,
     ) {}
     async execute(data: PlaceOrderDto = placeOrderDto) {
         const order = new Order(data.customerEmail, data.amount);
-
-        const skipExternalIntegrations =
-            process.env["SKIP_EXTERNAL_INTEGRATIONS"] === "true" ||
-            (process.env["NODE_ENV"] ?? "development") !== "production";
-
-        if (skipExternalIntegrations) {
-            return { orderId: order.id };
-        }
-
-        await this.ordersContainer.resolve<IOrdersRepository>("OrdersRepository").create(order);
-        await this.ordersContainer.resolve<IQueueGateway>("QueueGateway").publishMessage({ orderId: order.id });
-        await this.ordersContainer.resolve<IEmailGateway>("EmailGateway").sendEmail(
+        await this.orderRepository.create(order);
+        await this.queueGateway.publishMessage({ orderId: order.id });
+        await this.emailGateway.sendEmail(
             data.customerEmail,
             "Order Confirmation",
             `Your order has been placed successfully. Your order ID is ${order.id}.`,

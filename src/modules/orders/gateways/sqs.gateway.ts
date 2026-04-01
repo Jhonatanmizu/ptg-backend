@@ -1,6 +1,9 @@
 import { SendMessageCommand, SQSClient } from "@aws-sdk/client-sqs";
 import type { IQueueGateway } from "@/modules/orders/interfaces";
+import { Injectable } from "@/modules/orders/di/Injectable";
 
+
+@Injectable()
 export class SQSGateway  implements IQueueGateway{
     private client: SQSClient;
     private queueUrl: string;
@@ -9,7 +12,7 @@ export class SQSGateway  implements IQueueGateway{
         this.client = new SQSClient({
             region: "sa-east-1",
         });
-        this.queueUrl = "";
+        this.queueUrl = process.env["SQS_QUEUE_URL"] ?? ""
     }
 
     async publishMessage(message: Record<string, unknown>): Promise<void> {

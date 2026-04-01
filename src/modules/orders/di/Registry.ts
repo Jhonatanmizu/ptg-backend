@@ -1,7 +1,8 @@
-type Constructor<T> = new (...args: any[]) => T;
+import type { Constructor } from "@/modules/orders/types";
+
 
 export interface IContainer{
-    register<T>(token:string,service: Constructor<T>): void;
+    register<T>(service: Constructor<T>): void;
     resolve<T >(token:string): T;
 }
 
@@ -22,7 +23,8 @@ export class  Registry {
     }
     
 
-    register<T>(token:string, service: Constructor<T>): void {
+    register<T>(service: Constructor<T>): void {
+        const token = service.name
         if(this.services.has(token)) {
             throw new Error(`Service ${token} is already registered`);
         }
